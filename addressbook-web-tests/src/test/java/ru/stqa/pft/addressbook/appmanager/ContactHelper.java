@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
+import sun.security.util.ByteArrayLexOrder;
 
 public class ContactHelper extends HelperBase{
 
@@ -23,9 +24,8 @@ public class ContactHelper extends HelperBase{
         type(By.name("home"),contactData.getHomePhone());
         type(By.name("email"),contactData.getEmail());
         if (creation) {
-            new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
-        } else {
-            Assert.assertFalse(isElementPresent(By.name("new_group")));
+            new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());} else
+                {Assert.assertFalse(isElementPresent(By.name("new_group")));
         }
     }
 
@@ -51,5 +51,19 @@ public class ContactHelper extends HelperBase{
 
     public void submitContactModification() {
         click(By.xpath("(//input[@name='update'])[2]"));
+    }
+
+    public void createContact(ContactData contact) {
+        initContactCreation();
+        fillContactForm(contact, true);
+        submitContactCreation();
+        returnToHomePage();
+    }
+    public void returnToHomePage() {
+        click(By.linkText("home"));
+    }
+
+    public boolean contactExists() {
+        return isElementPresent(By.name("selected[]"));
     }
 }
